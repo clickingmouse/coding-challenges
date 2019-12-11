@@ -1,12 +1,26 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 module.exports = {
-
   // GET /v1/products
   listProduct: {
     /*
      *  WRITE YOUR CODE HERE
      */
+
+    // `Product Fields`
+    // | Field | Format | Optional |
+    // | - | - | :-: |
+    // | name | string ||
+    // | sweetiness | integer 1-10 | yes|
+    // | isAvailable | boolean ||
+    body: {
+      name: Joi.string().required,
+      sweetness: Joi.number()
+        .integer()
+        .min(1)
+        .max(10),
+      isAvailable: Joi.boolean().required
+    }
   },
 
   // POST /v1/products
@@ -28,5 +42,5 @@ module.exports = {
     /*
      *  WRITE YOUR CODE HERE
      */
-  },
+  }
 };

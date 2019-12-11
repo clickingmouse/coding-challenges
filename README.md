@@ -54,3 +54,5 @@ Bonus point (those items are optional):
 - **Task 2** [X Power N](tasks/task_2/question.md)
 - **Task 3** [Sugar Dealer - backend](tasks/task_3/question.md)
 - **Task 4** [Sugar Dealer - frontend](tasks/task_4/question.md)
+
+"precommit": "yarn lint",

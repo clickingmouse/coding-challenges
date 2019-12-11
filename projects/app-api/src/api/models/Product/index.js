@@ -1,11 +1,11 @@
-const Sequelize = require('sequelize');
-const httpStatus = require('http-status');
-const { isNil, omit, omitBy } = require('lodash');
+const Sequelize = require("sequelize");
+const httpStatus = require("http-status");
+const { isNil, omit, omitBy } = require("lodash");
 
 const { DataTypes } = Sequelize;
-const logger = require('../../../config/logger');
-const APIError = require('../../utils/APIError');
-const seed = require('./seed');
+const logger = require("../../../config/logger");
+const APIError = require("../../utils/APIError");
+const seed = require("./seed");
 
 class Product extends Sequelize.Model {
   static init(sequelize) {
@@ -13,24 +13,24 @@ class Product extends Sequelize.Model {
       {
         name: {
           type: DataTypes.STRING,
-          allowNull: false,
+          allowNull: false
         },
         sweetiness: {
-          type: DataTypes.STRING,
+          type: DataTypes.STRING
         },
         color: {
-          type: DataTypes.STRING,
+          type: DataTypes.STRING
         },
         isAvailable: {
           type: DataTypes.BOOLEAN,
           defaultValue: false,
-          allowNull: false,
-        },
+          allowNull: false
+        }
       },
       {
         sequelize,
-        modelName: 'product',
-      },
+        modelName: "product"
+      }
     );
   }
 
@@ -47,31 +47,75 @@ class Product extends Sequelize.Model {
       }
 
       throw new APIError({
-        message: 'Product does not exist',
-        status: httpStatus.NOT_FOUND,
+        message: "Product does not exist",
+        status: httpStatus.NOT_FOUND
       });
     } catch (error) {
       throw error;
     }
   }
 
-  static list({
-    page = 1,
-    perPage = 30,
-    productId,
-  }) {
+  static list({ page = 1, perPage = 30, productId }) {
     try {
       const where = omitBy(productId, isNil);
-
       return this.findAll({
         where: {
-          ...where,
+          // //+ modifiy query to filter isAvailable=true KK
+          // isAvailable: isAvailable
+          ...where
         },
         include: PG.ProductStock,
         offset: perPage * (page - 1),
         limit: perPage,
-        order: [['createdAt', 'DESC']],
+        order: [["createdAt", "DESC"]]
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static listAvailable({ page = 1, perPage = 30, productId, isAvailable }) {
+    try {
+      const where = omitBy(productId, isNil);
+      console.log("isAvailable =", isAvailable);
+      return this.findAll({
+        where: {
+          //+ modifiy query to filter isAvailable=true KK
+          isAvailable: isAvailable
+          //          ...where
+        },
+        include: PG.ProductStock,
+        offset: perPage * (page - 1),
+        limit: perPage,
+        order: [["createdAt", "DESC"]]
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static listSummary({ page = 1, perPage = 30, productId }) {
+    try {
+      const where = omitBy(productId, isNil);
+      console.log("getting summary");
+      return sequelize.query(
+        'SELECT products.name, products.id,SUM ("productStocks"."amount") AS availableAmount, SUM (CASE WHEN "productStocks"."expiredAt" < CURRENT_DATE THEN "productStocks"."amount" END) AS expiredAmount FROM products INNER JOIN "productStocks" ON products.id = "productStocks"."productId" GROUP BY "products"."name", "products"."id", "productStocks"."productId" '
+      );
+      // .then(results => {
+      //   console.log("results:", results);
+      // });
+
+      // this.findAll({
+      //   where: {
+      //     //+ modifiy query to filter isAvailable=true KK
+      //     //attributes: ["id", "name", "availableAmount", "expiredAmount"]
+      //     ...where
+      //   },
+      //   include: PG.ProductStock,
+      //   offset: perPage * (page - 1),
+      //   limit: perPage
+      //   //        order: [["createdAt", "DESC"]]
+      // });
     } catch (error) {
       throw error;
     }
@@ -88,10 +132,7 @@ class Product extends Sequelize.Model {
 
   transform() {
     try {
-      return omit(this.toJSON(), [
-        'createdAt',
-        'updatedAt',
-      ]);
+      return omit(this.toJSON(), ["createdAt", "updatedAt"]);
     } catch (error) {
       throw error;
     }
