@@ -1,7 +1,12 @@
 import React from "react";
+import Page from "./Page";
 
 const Home = () => {
-  return <div>Put your page component here</div>;
+  return (
+    <div>
+      <Page />
+    </div>
+  );
 };
 
 export default Home;
