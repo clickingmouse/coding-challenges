@@ -21,32 +21,30 @@ exports.create = async (req, res, next) => {
  */
 exports.list = async (req, res, next) => {
   console.log("list:params:query", req.param("isAvailable"), req.query);
-  var getVar = req.param("isAvailable") === "";
-  console.log("->", getVar);
 
-  if (req.param("isAvailable")) {
-    console.log("isAvailable present");
-    try {
-      //+ req.query would grab the isAvailable here KKO
-      console.log("controller.listAvalable");
-      const products = await PG.Product.listAvailable(req.query);
-      console.log("product.controller->products", products);
-      const transformedProducts = products.map(product => product.transform());
-      res.json(transformedProducts);
-    } catch (error) {
-      next(error);
-    }
-  } else {
-    console.log("isAvailable not present");
-
-    try {
-      const products = await PG.Product.list(req.query);
-      const transformedProducts = products.map(product => product.transform());
-      res.json(transformedProducts);
-    } catch (error) {
-      next(error);
-    }
+  //if (req.param("isAvailableXXXX")) {
+  //console.log("isAvailable present");
+  try {
+    //+ req.query would grab the isAvailable here KKO
+    console.log("controller.listAvalable");
+    const products = await PG.Product.listAvailable(req.query);
+    //console.log("product.controller->products", products);
+    const transformedProducts = products.map(product => product.transform());
+    res.json(transformedProducts);
+  } catch (error) {
+    next(error);
   }
+  // } else {
+  // console.log("isAvailable not present");
+
+  // try {
+  //   const products = await PG.Product.list(req.query);
+  //   const transformedProducts = products.map(product => product.transform());
+  //   res.json(transformedProducts);
+  // } catch (error) {
+  //   next(error);
+  // }
+  //}
 };
 
 //below not used

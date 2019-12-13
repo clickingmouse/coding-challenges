@@ -61,14 +61,18 @@ class Product extends Sequelize.Model {
     }
   }
 
-  static list({ page = 1, perPage = 30, productId }) {
+  static list({ page = 1, perPage = 30, productId, isAvailable, isExpired }) {
+    console.log("modles/product/index :: list : isAvailable?", isAvailable);
+    console.log("modles/product/index :: list : isExpired?", isExpired);
+
     try {
       const where = omitBy(productId, isNil);
       return this.findAll({
         where: {
-          // //+ modifiy query to filter isAvailable=true KK
-          // isAvailable: isAvailable
-          ...where
+          // //+ modifiy query to filter isAvailable=T/F and/or isExpired = T/F KK
+          isAvailable: isAvailable,
+          isExpired: isExpired
+          //...where
         },
         include: PG.ProductStock,
         offset: perPage * (page - 1),
@@ -80,15 +84,30 @@ class Product extends Sequelize.Model {
     }
   }
 
-  static listAvailable({ page = 1, perPage = 30, productId, isAvailable }) {
+  //dirty hack
+  static listAvailable({
+    page = 1,
+    perPage = 30,
+    productId,
+    isAvailable,
+    isExpired
+  }) {
+    console.log("productId =", productId);
+    console.log("isAvailable =", isAvailable);
+    console.log("isAvailable =", isExpired);
     try {
-      const where = omitBy(productId, isNil);
-      console.log("isAvailable =", isAvailable);
+      const where = {
+        ...omitBy(productId, isNil),
+        ...omitBy(isAvailable, isNil),
+        ...omitBy(isExpired)
+      };
+
+      console.log(".", where);
       return this.findAll({
         where: {
           //+ modifiy query to filter isAvailable=true KK
-          isAvailable: isAvailable
-          //          ...where
+          //isAvailable: isAvailable
+          ...where
         },
         include: PG.ProductStock,
         offset: perPage * (page - 1),
