@@ -6,6 +6,7 @@ const { DataTypes } = Sequelize;
 const logger = require("../../../config/logger");
 const APIError = require("../../utils/APIError");
 const seed = require("./seed");
+const Op = Sequelize.Op;
 
 //Hapi Joi is an object schema description language and validator for JavaScript objects.
 
@@ -81,13 +82,24 @@ class Product extends Sequelize.Model {
       if (isAvailable) {
         where = { ...where, isAvailable: true };
       }
-
+      var include;
+      if (isExpired) {
+        include = {
+          expiredAt: { [Op.lt]: new Date() }
+        };
+      }
       console.log("+", where);
       return this.findAll({
         where: {
           ...where
         },
-        include: [{ model: PG.ProductStock }],
+        include: [
+          {
+            model: PG.ProductStock,
+            where: { ...include }
+          }
+        ],
+
         offset: perPage * (page - 1),
         limit: perPage,
         order: [["createdAt", "DESC"]]
