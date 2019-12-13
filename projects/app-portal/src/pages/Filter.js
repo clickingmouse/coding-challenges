@@ -15,7 +15,7 @@ export default function Filter(props) {
 
   const handleChange = () => {
     console.log("checked");
-    setIsAvailable(true);
+    setIsAvailable(!isAvailable);
   };
   const handleClear = () => {
     console.log("clearing");
