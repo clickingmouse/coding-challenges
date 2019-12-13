@@ -15,18 +15,49 @@ the repo is https://github.com/clickingmouse/t1-gol
 It is Docker ready and is hosted here 
 https://frozen-harbor-01265.herokuapp.com/
 
-I wish I had more time to work on this assessment, maybe another day would allow me to dive deeper into each problem.
-
-After glancing at all the problems, The roadmap was to attempt on all the basic tasks first, and come back to the bonus points at the end to kind of double check my work.
-
+----------------------------------------------------------------
 The answers to Task 1 & 2 are written in the /tasks/task_1/ & /tasks/task_2 directory.
 
 These were written in golang.  The reason being it is similar to C and there were more algorithms pseudocode tailored for C.
 
 Task 3 - 
 MISSION 1 
-There is a very high chance that I may have underestimated the work required.  The plan was to double check it when working on the bonus point applying the validation to the route, unfortunately the plan did not work out
+updated files:
+api/validations/product.validation.json
+api/validations/productStock.validation.json
+referencing hapi - joi 
 
+MISSION 1 - Bonus point
+updated files:
+api/routes/v1/product.route.js
+api/routes/v1/productStock.route.js
+* have not extensively tested it except that it was sending the same output
+
+MISSION 2
+BIG ASSUMPTION:
+that the path is a type error
+the api path is at ...v1/product?isAvailable={IS_AVAILABLE}
+not ...api/v1/product...
+
+updated files
+projects/app-api/src/api/controllers/product.controller.js 
+-> list
+originally modified that splits the req.query with if/else
+afterwards I thought there should be a more better cleaner way and refactored code, as a result this file is reverted to unchanged 
+/api/models/Product/index.js 
+-> static.list 
+originally created listAvailable but no longer needed after refactoring
+
+MISSION 2 Bonus point
+implemented in file
+/api/models/Product/index.js 
+-> static.list 
+
+
+
+
+
+/
 MISSION 2 & MISSION3
 Should be working both are new libraries which I have nevere used before.  In the end I opted for and SQL string for MISSION 3 as I am very sure that sending a SQL statement would be one of the options available.
 

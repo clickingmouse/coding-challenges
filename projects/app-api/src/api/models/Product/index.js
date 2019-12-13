@@ -63,9 +63,9 @@ class Product extends Sequelize.Model {
   }
 
   static list({ page = 1, perPage = 30, productId, isAvailable, isExpired }) {
-    console.log("modles/product/index :: list : productId?", productId);
-    console.log("modles/product/index :: list : isAvailable?", isAvailable);
-    console.log("modles/product/index :: list : isExpired?", isExpired);
+    // console.log("modles/product/index :: list : productId?", productId);
+    // console.log("modles/product/index :: list : isAvailable?", isAvailable);
+    // console.log("modles/product/index :: list : isExpired?", isExpired);
 
     try {
       // //+ modifiy query to filter isAvailable=T/F and/or isExpired = T/F KK
@@ -73,7 +73,7 @@ class Product extends Sequelize.Model {
       console.log(omitBy(isAvailable, isNil));
       var where = {
         ...omitBy(productId, isNil)
-        //did not work, solve later
+        //did not work,
         //isAvailable: isNil(isAvailable)
         //...omitBy(isAvailable, isNil)
       };
@@ -142,7 +142,7 @@ class Product extends Sequelize.Model {
       const where = omitBy(productId, isNil);
       console.log("getting summary");
       return sequelize.query(
-        'SELECT products.name, products.id,SUM ("productStocks"."amount") AS availableAmount, SUM (CASE WHEN "productStocks"."expiredAt" < CURRENT_DATE THEN "productStocks"."amount" END) AS expiredAmount FROM products INNER JOIN "productStocks" ON products.id = "productStocks"."productId" GROUP BY "products"."name", "products"."id", "productStocks"."productId" '
+        'SELECT products.name, products.id, COALESCE(SUM ("productStocks"."amount"),0) AS availableAmount, COALESCE(SUM (CASE WHEN "productStocks"."expiredAt" < CURRENT_DATE THEN "productStocks"."amount" END),0) AS expiredAmount FROM products INNER JOIN "productStocks" ON products.id = "productStocks"."productId" GROUP BY "products"."name", "products"."id", "productStocks"."productId" '
       );
       // .then(results => {
       //   console.log("results:", results);

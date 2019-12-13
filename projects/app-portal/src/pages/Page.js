@@ -13,11 +13,7 @@ function Page() {
     axios
       .get("http://localhost:3000/v1/product" + opts)
       .then(data => {
-        // let { dat } = d.data;
-        // console.log(d);
         setSugar(data.data);
-        console.log(data.data);
-        console.log("got s->", sugar);
       })
       .catch(err => {
         console.log(err);

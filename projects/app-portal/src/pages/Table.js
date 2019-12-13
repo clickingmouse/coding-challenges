@@ -8,6 +8,8 @@ export default function Table(props) {
     let newObj = {};
     //console.log("p", product);
     newObj = Object.assign(newObj, product);
+    // should be a better cleaner way involving filter
+    // or dont really need to delete it since its not being used anyways
     delete newObj.productStocks;
     product.productStocks.forEach(stock => {
       //  console.log("s", stock);
@@ -54,22 +56,7 @@ export default function Table(props) {
             <th>productID</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-          </tr>
-          {list}
-        </tbody>
+        <tbody>{list}</tbody>
       </TB>
     </div>
   );
