@@ -1,26 +1,27 @@
 const express = require("express");
 const validate = require("express-validation");
 const controller = require("../../controllers/product.controller");
-
+const validation = require("../../validations/product.validation");
 const router = express.Router();
 
 // router.route('/')
 //   .get(controller.list)
 //   .post(controller.create);
 
-router
-  .route("/")
-  .get(controller.list)
-  .post(controller.create);
-
-// router.route('/', validate(validation.login))
+// router
+//   .route("/")
 //   .get(controller.list)
 //   .post(controller.create);
 
 router
+  .route("/")
+  .get(validate(validation.listProduct), controller.list)
+  .post(validate(validation.createProduct), controller.create);
+
+router
   .route("/:productId")
-  .patch(controller.update)
-  .delete(controller.remove);
+  .patch(validate(validation.updateProduct), controller.update)
+  .delete(validate(validation.removeProduct), controller.remove);
 
 // Mission 2
 // Enhance the products' listing API to allow filter by the product status:
