@@ -54,16 +54,27 @@ implemented in file
 -> static.list 
 
 
+Mission 3
+projects/app-api/src/api/routes/v1/product.route.js
+*validation not applied to this route
+projects/app-api/src/api/controllers/product.controller.js
+projects/app-api/src/api/models/Product/index.js
+->listSummary
+used SQL query because, I can test the query directly on an postgresql adminpanel.  path of least resistence prevailed here
 
 
 
-/
-MISSION 2 & MISSION3
-Should be working both are new libraries which I have nevere used before.  In the end I opted for and SQL string for MISSION 3 as I am very sure that sending a SQL statement would be one of the options available.
+Task 4 -  [Optional] 
 
-Task 4 -
-Due to time limitations. I have only did the basic requirement.  There might have been a more elegant (one liner) way to flatten the nested json , i opted to take the easier way. 
+projects/app-portal/src/pages/*
+projects/app-portal/src/App.js
+
+installed react-bootstrap but didn't really extensively used it
+Did the bare bones basic, 
+refactored and added isExpired feature
+
+for the react-router... I am not really sure how to do it.
 
 ps
-all of a sudden i was gett git pre-commit errors, and hence removed the following line from the package.json 
+all of a sudden i was gett gitting pre-commit errors, and hence removed the following line from the package.json 
 "precommit": "yarn lint",
