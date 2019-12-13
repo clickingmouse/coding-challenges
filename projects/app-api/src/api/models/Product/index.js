@@ -7,6 +7,12 @@ const logger = require("../../../config/logger");
 const APIError = require("../../utils/APIError");
 const seed = require("./seed");
 
+//Hapi Joi is an object schema description language and validator for JavaScript objects.
+
+//https://github.com/andrewkeig/express-validation
+//is simply an object, which uses https://github.com/spumko/joi to define validation rules for a request.
+//encapsulated inside body; which is important; as this defines their location, alternatives being, params, query, headers and cookies.
+
 class Product extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
