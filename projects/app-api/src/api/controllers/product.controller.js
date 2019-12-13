@@ -27,7 +27,7 @@ exports.list = async (req, res, next) => {
   try {
     //+ req.query would grab the isAvailable here KKO
     console.log("controller.listAvalable");
-    const products = await PG.Product.listAvailable(req.query);
+    const products = await PG.Product.list(req.query);
     //console.log("product.controller->products", products);
     const transformedProducts = products.map(product => product.transform());
     res.json(transformedProducts);

@@ -62,17 +62,21 @@ class Product extends Sequelize.Model {
   }
 
   static list({ page = 1, perPage = 30, productId, isAvailable, isExpired }) {
+    console.log("modles/product/index :: list : productId?", productId);
     console.log("modles/product/index :: list : isAvailable?", isAvailable);
     console.log("modles/product/index :: list : isExpired?", isExpired);
 
     try {
-      const where = omitBy(productId, isNil);
+      const where = {
+        ...omitBy(productId, isNil),
+        isAvailable: isAvailable
+        //...omitBy(isExpired, isNil)
+      };
+      console.log("+", where);
       return this.findAll({
         where: {
           // //+ modifiy query to filter isAvailable=T/F and/or isExpired = T/F KK
-          isAvailable: isAvailable,
-          isExpired: isExpired
-          //...where
+          ...where
         },
         include: PG.ProductStock,
         offset: perPage * (page - 1),
@@ -92,15 +96,8 @@ class Product extends Sequelize.Model {
     isAvailable,
     isExpired
   }) {
-    console.log("productId =", productId);
-    console.log("isAvailable =", isAvailable);
-    console.log("isAvailable =", isExpired);
     try {
-      const where = {
-        ...omitBy(productId, isNil),
-        ...omitBy(isAvailable, isNil),
-        ...omitBy(isExpired)
-      };
+      const where = omitBy(productId, isNil);
 
       console.log(".", where);
       return this.findAll({
