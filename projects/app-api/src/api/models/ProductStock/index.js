@@ -1,9 +1,9 @@
-const Sequelize = require('sequelize');
-const { isNil, omit, omitBy } = require('lodash');
+const Sequelize = require("sequelize");
+const { isNil, omit, omitBy } = require("lodash");
 
 const { DataTypes } = Sequelize;
-const logger = require('../../../config/logger');
-const seed = require('./seed');
+const logger = require("../../../config/logger");
+const seed = require("./seed");
 
 class ProductStock extends Sequelize.Model {
   static init(sequelize) {
@@ -12,26 +12,26 @@ class ProductStock extends Sequelize.Model {
         // Original amount
         originalAmount: {
           type: DataTypes.DECIMAL,
-          required: true,
+          required: true
         },
         // Remaining amount
         amount: {
           type: DataTypes.DECIMAL,
-          required: true,
+          required: true
         },
         importedAt: {
           type: DataTypes.DATE,
-          required: true,
+          required: true
         },
         expiredAt: {
           type: DataTypes.DATE,
-          required: true,
-        },
+          required: true
+        }
       },
       {
         sequelize,
-        modelName: 'productStock',
-      },
+        modelName: "productStock"
+      }
     );
   }
 
@@ -47,15 +47,16 @@ class ProductStock extends Sequelize.Model {
     }
   }
 
-  static list({
-    page = 1,
-    perPage = 30,
-  }) {
+  static list({ page = 1, perPage = 30, isExpired }) {
+    console.log("api/models/productstock :: list : isExpired?", isExpired);
     try {
+      //const where = {}
       return this.findAll({
+        where: {},
+
         offset: perPage * (page - 1),
         limit: perPage,
-        order: [['createdAt', 'DESC']],
+        order: [["createdAt", "DESC"]]
       });
     } catch (error) {
       throw error;
@@ -63,10 +64,7 @@ class ProductStock extends Sequelize.Model {
   }
 
   transform() {
-    return omit(this.toJSON(), [
-        'createdAt',
-        'updatedAt',
-    ]);
+    return omit(this.toJSON(), ["createdAt", "updatedAt"]);
   }
 }
 
