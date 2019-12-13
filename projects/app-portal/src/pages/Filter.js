@@ -1,25 +1,39 @@
 import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, NavItem } from "react-bootstrap";
 export default function Filter(props) {
   const [isAvailable, setIsAvailable] = useState(false);
+  const [isExpired, setIsExpired] = useState(false);
+
   const handleSubmit = e => {
     e.preventDefault();
-    if (isAvailable) {
-      props.getSugarHandler("/?isAvailable=true");
-      console.log("getting isAvailable sugar");
-    } else {
-      props.getSugarHandler();
-      console.log("getting all sugar");
-    }
+    console.log("isExpired?", isExpired);
+    console.log("isAvail?", isAvailable);
+    const sugarOptions =
+      "/?" +
+      (isAvailable ? "isAvailable=true&" : "") +
+      (isExpired ? "isExpired=true" : "");
+    props.getSugarHandler(sugarOptions);
+    console.log(">>>", sugarOptions);
+    // if (isAvailable) {
+    //   //props.getSugarHandler("/?isAvailable=true");
+    //   console.log("getting isAvailable sugar");
+    // } else {
+    //   props.getSugarHandler();
+    //   console.log("getting all sugar");
+    // }
   };
 
-  const handleChange = () => {
-    console.log("checked");
+  const handleExpired = () => {
+    setIsExpired(!isExpired);
+  };
+
+  const handleAvailable = () => {
     setIsAvailable(!isAvailable);
   };
   const handleClear = () => {
     console.log("clearing");
     setIsAvailable(false);
+    setIsExpired(false);
   };
   return (
     <div>
@@ -34,7 +48,7 @@ export default function Filter(props) {
         <Form.Group controlId="formisAvailableCheckbox">
           <Form.Check
             type="checkbox"
-            onChange={handleChange}
+            onChange={handleAvailable}
             label="isAvailable"
             checked={isAvailable}
           />
@@ -42,9 +56,10 @@ export default function Filter(props) {
         <Form.Group controlId="formisExpiredCheckbox">
           <Form.Check
             type="checkbox"
-            onChange={handleChange}
+            onChange={handleExpired}
             label="isExpired"
-            disabled
+            checked={isExpired}
+            disabled={!isAvailable}
           />
         </Form.Group>
         <Button variant="primary" type="submit">
